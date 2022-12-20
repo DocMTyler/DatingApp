@@ -2,7 +2,7 @@
     <div class="container">
       <a class="navbar-brand" href="#">Dating App</a>
       
-        <ul class="navbar-nav mr-auto" *ngIf="loggedIn">
+        <ul class="navbar-nav mr-auto" *ngIf="accountService.currentUser$ | async">
           <li class="nav-item">
             <a class="nav-link" href="#">Matches</a>
           </li>
@@ -12,21 +12,18 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Messages</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" (click)="logout()">Logout</a>
-          </li>
         </ul>
 
-        <div class="dropdown" *ngIf="loggedIn" ng-click="$event.stopPropagation()" dropdown>
+        <div class="dropdown" *ngIf="accountService.currentUser$ | async" ng-click="$event.stopPropagation()" dropdown>
           <a class="dropdown-toggle text-light" dropdownToggle>Welcome user</a>
           <div class="dropdown-menu" *dropdownMenu>
-            <a class="dropdown-item">Edit Profile</a>
+            <a class="dropdown-item mt-3">Edit Profile</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" (click)="logout()">Logout</a>
           </div>
         </div>
 
-        <form *ngIf="!loggedIn" #loginForm="ngForm" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()" autocomplete="on">
+        <form *ngIf="(accountService.currentUser$ | async) === null" #loginForm="ngForm" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()" autocomplete="on">
           <input 
             name="username"
             [(ngModel)]="model.username"
